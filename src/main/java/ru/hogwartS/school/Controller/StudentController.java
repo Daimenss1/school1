@@ -44,7 +44,7 @@ public class StudentController {
 
 
     @DeleteMapping("{idDelete}")
-    public ResponseEntity<Student> deleteStudent(@PathVariable Long idDelete) {
+    public ResponseEntity deleteStudent(@PathVariable Long idDelete) {
         Student studentDelete = studentService.deleteStudent(idDelete);
         if (studentDelete == null) {
             return ResponseEntity.notFound().build();

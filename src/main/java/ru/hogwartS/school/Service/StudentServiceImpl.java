@@ -2,58 +2,50 @@ package ru.hogwartS.school.Service;
 
 import org.springframework.stereotype.Service;
 import ru.hogwartS.school.Model.Student;
+import ru.hogwartS.school.Repository.StudentRepository;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class StudentServiceImpl implements StudentService {
 
-    private final Map<Long, Student> studentMap = new HashMap<>();
-    private long lastId = 0;
+    private StudentRepository studentRepository;
+
+    public StudentServiceImpl(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
+    }
 
     @Override
     public Student createStudent(Student studentCreate) {
-        studentCreate.setId(++lastId);
-        studentMap.put(lastId, studentCreate);
-        return studentCreate;
+        return studentRepository.save(studentCreate);
     }
 
     @Override
     public Student readStudent(long idRead) {
-        return studentMap.get(idRead);
+        return studentRepository.findById(idRead).get();
     }
 
     @Override
     public Student updateStudent(Student studentUpdate) {
-        studentMap.put(studentUpdate.getId(), studentUpdate);
-        return studentUpdate;
+        ;
+        return studentRepository.save(studentUpdate);
     }
 
 
     @Override
     public Student deleteStudent(long idDelete) {
-        return studentMap.remove(idDelete);
+        studentRepository.deleteById(idDelete);
+        return null;
     }
 
     @Override
     public Collection<Student> getStudentByAge(int ageFilter) {
-        final Map<Long, Student> studentMapFilteredByAge = new HashMap<>();
-        Long studentId = 0L;
-        for (Long i = 1L; i < 1L*(studentMap.size())+1L; i++) {
-            if (studentMap.get(i).getAge() == ageFilter) {
-                studentMapFilteredByAge.put(studentId, studentMap.get(i));
-                studentId++;
-            }
-        }
-        return Collections.unmodifiableCollection(studentMapFilteredByAge.values());
+        return studentRepository.findAll();
     }
 
 
     @Override
     public Collection<Student> allStudent() {
-        return Collections.unmodifiableCollection(studentMap.values());
+        return studentRepository.findAll();
     }
 }
