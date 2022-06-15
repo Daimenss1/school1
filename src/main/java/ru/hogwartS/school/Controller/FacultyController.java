@@ -41,7 +41,7 @@ public class FacultyController {
         if (facultyDelete == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(facultyDelete);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("color/{color}")
