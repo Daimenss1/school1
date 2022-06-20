@@ -9,22 +9,22 @@ import java.util.Collection;
 @Service
     public class FacultyServiceImpl implements FacultyService {
 
-        private FacultyRepository facultyRepository;
+    private final FacultyRepository facultyRepository;
 
-        public FacultyServiceImpl(FacultyRepository facultyRepository) {
-            this.facultyRepository = facultyRepository;
-        }
+    public FacultyServiceImpl(FacultyRepository facultyRepository) {
+        this.facultyRepository = facultyRepository;
+    }
 
 
-        @Override
-        public Faculty createFaculty(Faculty faculty) {
-            return facultyRepository.save(faculty);
-        }
+    @Override
+    public Faculty createFaculty(Faculty faculty) {
+        return facultyRepository.save(faculty);
+    }
 
-        @Override
-        public Faculty readFaculty(long idRead) {
-            return facultyRepository.findById(idRead).orElseThrow();
-        }
+    @Override
+    public Faculty readFaculty(long idRead) {
+        return facultyRepository.findById(idRead).orElseThrow();
+    }
 
     @Override
     public Faculty updateFaculty(Faculty faculty) {
@@ -39,7 +39,11 @@ import java.util.Collection;
 
     @Override
     public Collection<Faculty> getFacultyByColor(String colorFilter) {
-        return facultyRepository.findAll();
+        return facultyRepository.findAllByColor(colorFilter);
+    }
+    @Override
+    public Collection<Faculty> findFacultyByColorAndName(String colorFilter, String nameFilter) {
+        return facultyRepository.findFacultiesByNameIgnoreCaseOrColorIgnoreCase(nameFilter,colorFilter);
     }
 
     @Override
