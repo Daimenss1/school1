@@ -41,7 +41,7 @@ public class FacultyController {
         if (facultyDelete == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(facultyDelete);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("color/{color}")
@@ -51,6 +51,11 @@ public class FacultyController {
             ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(facultyCollection);
+    }
+    @GetMapping("colororname")
+    public Collection<Faculty> getFacultyByColorOrName(@RequestParam(required = false) String color,
+                                                       @RequestParam(required = false) String name) {
+        return facultyService.findFacultyByColorAndName(color, name);
     }
 
     @GetMapping("all")
