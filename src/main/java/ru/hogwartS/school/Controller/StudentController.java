@@ -1,11 +1,11 @@
 package ru.hogwartS.school.Controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwartS.school.Model.Faculty;
 import ru.hogwartS.school.Model.Student;
 import ru.hogwartS.school.Service.StudentService;
-
 import java.util.Collection;
 
 @RestController
@@ -16,6 +16,7 @@ public class StudentController {
     public StudentController(StudentService studentService) {
         this.studentService = studentService;
     }
+
     @GetMapping("{idRead}")
     public ResponseEntity<Student> getStudentInfo(@PathVariable Long idRead) {
         Student studentGet = studentService.readStudent(idRead);
@@ -31,7 +32,7 @@ public class StudentController {
         if (studentCreate == null) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(studentCreate);
+        return ResponseEntity.status(HttpStatus.CREATED).body(studentCreate);
     }
 
     @PutMapping
@@ -46,11 +47,8 @@ public class StudentController {
 
     @DeleteMapping("{idDelete}")
     public ResponseEntity deleteStudent(@PathVariable Long idDelete) {
-        Student studentDelete = studentService.deleteStudent(idDelete);
-        if (studentDelete == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(studentDelete);
+        studentService.deleteStudent(idDelete);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("age/{age}")
@@ -58,7 +56,7 @@ public class StudentController {
         return studentService.getStudentByAge(age);
     }
 
-    @GetMapping("agebetw")
+    @GetMapping("agebtw")
     public Collection<Student> getStudentByAgeRange(@RequestParam int ageMin,
                                                     @RequestParam int ageMax) {
         return studentService.findByAgeBetween(ageMin, ageMax);
@@ -74,11 +72,31 @@ public class StudentController {
         return studentService.findFacultyOfStudent(studentId);
     }
 
-
     @GetMapping("all")
     public Collection<Student> allStudent() {
         return studentService.allStudent();
     }
+
+    @GetMapping("total-number")
+    public ResponseEntity<Integer> getStudentsTotalNumber() {
+        Integer studentTotalNumber = studentService.studentsTotalNumber();
+        if (studentTotalNumber == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(studentTotalNumber);
+    }
+
+    @GetMapping("average-age")
+    public ResponseEntity<Integer> getStudentsAverageAge() {
+        Integer studentsAverageAge = studentService.studentsAverageAge();
+        if (studentsAverageAge == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(studentsAverageAge);
+    }
+
+    @GetMapping("last-five")
+    public Collection<Student> lastFiveStudents() {
+        return studentService.lastFiveStudents();
+    }
 }
-
-
