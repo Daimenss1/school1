@@ -27,7 +27,7 @@ public class StudentController {
     }
 
     @PostMapping
-    public ResponseEntity<Student> createStudent(@RequestBody Student student) {
+    public ResponseEntity<Object> createStudent(@RequestBody Student student) {
         Student studentCreate = studentService.createStudent(student);
         if (studentCreate == null) {
             return ResponseEntity.badRequest().build();
