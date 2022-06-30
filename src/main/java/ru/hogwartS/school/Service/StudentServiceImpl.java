@@ -1,59 +1,97 @@
 package ru.hogwartS.school.Service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import ru.hogwartS.school.Model.Faculty;
 import ru.hogwartS.school.Model.Student;
+import ru.hogwartS.school.Repository.StudentRepository;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class StudentServiceImpl implements StudentService {
 
-    private final Map<Long, Student> studentMap = new HashMap<>();
-    private long lastId = 0;
+    Logger logger = LoggerFactory.getLogger(StudentService.class);
+
+    private final StudentRepository studentRepository;
+
+    public StudentServiceImpl(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
+    }
 
     @Override
     public Student createStudent(Student studentCreate) {
-        studentCreate.setId(++lastId);
-        studentMap.put(lastId, studentCreate);
-        return studentCreate;
+        logger.info("Was invoked method for creating student");
+        return studentRepository.save(studentCreate);
     }
 
     @Override
     public Student readStudent(long idRead) {
-        return studentMap.get(idRead);
+        logger.info("Was invoked method for finding student by id");
+        return studentRepository.findById(idRead).orElseThrow();
     }
 
     @Override
     public Student updateStudent(Student studentUpdate) {
-        studentMap.put(studentUpdate.getId(), studentUpdate);
-        return studentUpdate;
+        logger.info("Was invoked method for updating student");
+        return studentRepository.save(studentUpdate);
     }
-
 
     @Override
     public Student deleteStudent(long idDelete) {
-        return studentMap.remove(idDelete);
+        logger.info("Was invoked method for deleting student");
+        studentRepository.deleteById(idDelete);
+        return null;
     }
 
     @Override
     public Collection<Student> getStudentByAge(int ageFilter) {
-        final Map<Long, Student> studentMapFilteredByAge = new HashMap<>();
-        Long studentId = 0L;
-        for (Long i = 1L; i < 1L*(studentMap.size())+1L; i++) {
-            if (studentMap.get(i).getAge() == ageFilter) {
-                studentMapFilteredByAge.put(studentId, studentMap.get(i));
-                studentId++;
-            }
-        }
-        return Collections.unmodifiableCollection(studentMapFilteredByAge.values());
+        logger.info("Was invoked method for finding all students by age");
+        return studentRepository.findAllByAge(ageFilter);
+    }
+
+    @Override
+    public Collection<Student> findByAgeBetween(int ageMin, int ageMax) {
+        logger.info("Was invoked method for finding all students within age interval");
+        return studentRepository.findAllByAgeBetween(ageMin,ageMax);
     }
 
 
     @Override
     public Collection<Student> allStudent() {
-        return Collections.unmodifiableCollection(studentMap.values());
+        logger.info("Was invoked method for finding all students");
+        return studentRepository.findAll();
+    }
+
+    @Override
+    public Collection<Student> findByFacultyId(Long facultyID) {
+        logger.info("Was invoked method for finding all students by faculty id");
+        return studentRepository.findStudentByFacultyId(facultyID);
+    }
+
+    @Override
+    public Faculty findFacultyOfStudent(Long studentId) {
+        logger.info("Was invoked method for finding faculty of student");
+        Student currentStudent = studentRepository.getById(studentId);
+        return currentStudent.getFaculty();
+    }
+
+    @Override
+    public Integer studentsTotalNumber() {
+        logger.info("Was invoked method for calculating total number of students sample");
+        return studentRepository.getStudentsTotalNumber();
+    }
+
+    @Override
+    public Integer studentsAverageAge() {
+        logger.info("Was invoked method for finding average age of students sample");
+        return studentRepository.getStudentsAverageAge();
+    }
+
+    @Override
+    public Collection<Student> lastFiveStudents() {
+        logger.info("Was invoked method for finding 5 last added students");
+        return studentRepository.lastFiveStudents();
     }
 }

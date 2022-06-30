@@ -12,9 +12,11 @@ public interface FacultyService {
 
     Faculty updateFaculty(Faculty faculty);
 
-    Faculty deleteFaculty(long idDelete);
+    void deleteFaculty(long idDelete);
 
     Collection<Faculty> getFacultyByColor(String colorFilter);
+
+    Collection<Faculty> findFacultyByColorAndName(String colorFilter, String nameFilter);
 
     Collection<Faculty> allFaculty();
 
