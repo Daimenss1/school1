@@ -1,4 +1,4 @@
 CREATE INDEX student_name_idx ON student(name);
 
-CREATE INDEX faculty_name_color_idx ON faculty(name, color);
+CREATE INDEX faculty_name_color_idx ON faculty(name, color);w
 
