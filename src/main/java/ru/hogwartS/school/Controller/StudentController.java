@@ -95,6 +95,15 @@ public class StudentController {
         return ResponseEntity.ok(studentsAverageAge);
     }
 
+    @GetMapping("/filteredByName")
+    public ResponseEntity<Collection<String>> getAllStudentsWithName() {
+        Collection<String> stringCollection = studentService.getFilteredByName();
+        if (stringCollection.size() == 0) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(stringCollection);
+    }
+
     @GetMapping("last-five")
     public Collection<Student> lastFiveStudents() {
         return studentService.lastFiveStudents();

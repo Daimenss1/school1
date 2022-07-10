@@ -3,11 +3,14 @@ package ru.hogwartS.school.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.hogwartS.school.Model.Faculty;
 import ru.hogwartS.school.Repository.FacultyRepository;
 
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.Optional;
 
 @Service
 public class FacultyServiceImpl implements FacultyService{
@@ -62,5 +65,20 @@ public class FacultyServiceImpl implements FacultyService{
         logger.info("Was invoked method for finding all faculties");
         return facultyRepository.findAll();
     }
+    public static ResponseEntity<String> getFacultyNameWithMaxLength(){
+        logger.info("Was invoked method to find faculty name with max length");
 
+        Optional<String> maxFacultyName = facultyRepository
+                .findAll().stream()
+                .map(Faculty::getName)
+                .max(Comparator.comparing(String::length));
+
+        if (maxFacultyName.isEmpty()) {
+            logger.error("There is no faculties not all");
+            return ResponseEntity.notFound().build();
+        }else {
+            logger.debug("Faculty name with max length: {}", maxFacultyName.get());
+            return ResponseEntity.ok(maxFacultyName.get());
+        }
+    }
 }

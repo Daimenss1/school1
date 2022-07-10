@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwartS.school.Model.Faculty;
 import ru.hogwartS.school.Service.FacultyService;
+import ru.hogwartS.school.Service.FacultyServiceImpl;
 
 import java.util.Collection;
 
@@ -66,5 +67,8 @@ public class FacultyController {
     public Collection<Faculty> allFaculty() {
         return facultyService.allFaculty();
     }
-
+    @GetMapping("max-name")
+    public ResponseEntity<String> getFacultyNameWithMaxLength(){
+        return FacultyServiceImpl.getFacultyNameWithMaxLength();
+    }
 }

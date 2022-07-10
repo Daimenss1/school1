@@ -9,7 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.stream.IntStream;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 
 @RestController
 public class InfoController {
@@ -30,17 +33,20 @@ public class InfoController {
         return ResponseEntity.ok(port);
     }
 
-    @GetMapping("/getSum")
-    public ResponseEntity<Integer> getSum (int n) {
-        long time = System.currentTimeMillis();
-        logger.debug("Start sum");
-        int sum = IntStream
-                .rangeClosed(1, n)
+    @GetMapping("/sum")
+    public int getSum() {
+        long start = System.currentTimeMillis();
+        List<Integer> limit = Stream
+                .iterate(1, a -> a +1)
+                .limit(1_000_000)
+                .collect(Collectors.toList());
+        int sum = limit.stream()
                 .parallel()
-                .reduce(0, Integer::sum);
-        time = System.currentTimeMillis() - time;
-        logger.debug("Start sum, time = {}", time);
-        return ResponseEntity.ok(sum);
+                .mapToInt(Integer::intValue)
+                .sum();
+        return (int) (System.currentTimeMillis() - start);
+
+
     }
 }
 

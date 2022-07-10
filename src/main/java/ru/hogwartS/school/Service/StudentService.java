@@ -29,4 +29,8 @@ public interface StudentService {
     Integer studentsAverageAge();
 
     Collection<Student> lastFiveStudents();
+
+    Collection<String> getFilteredByName();
+
+    Double getAllStudentsAvgAge();
 }
