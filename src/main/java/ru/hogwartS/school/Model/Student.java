@@ -1,11 +1,34 @@
 package ru.hogwartS.school.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import javax.persistence.*;
 import java.util.Objects;
 
+
+@Entity
 public class Student {
+    @Id
+    @GeneratedValue
     private Long id;
     private String name;
     private int age;
+
+    @ManyToOne
+    @JoinColumn(name = "faculty_id")
+    @JsonBackReference
+    private Faculty faculty;
+
+    public Student(String name, int age) {
+    }
+
+    public Faculty getFaculty() {
+        return faculty;
+    }
+
+    public Student(Long id) {
+        this.id = id;
+    }
 
     public Student(Long id, String name, int age) {
         this.id = id;
@@ -15,28 +38,6 @@ public class Student {
 
     public Student() {
 
-    }
-
-    @Override
-    public String toString() {
-        return "Student{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", age=" + age +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Student)) return false;
-        Student student = (Student) o;
-        return age == student.age && id.equals(student.id) && name.equals(student.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, age);
     }
 
     public Long getId() {
@@ -61,5 +62,27 @@ public class Student {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Student student = (Student) o;
+        return age == student.age && id.equals(student.id) && name.equals(student.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, age);
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                '}';
     }
 }
