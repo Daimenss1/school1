@@ -108,4 +108,12 @@ public class StudentController {
     public Collection<Student> lastFiveStudents() {
         return studentService.lastFiveStudents();
     }
+    @GetMapping("parallel-thread")
+    public void getNames() {
+        studentService.getStudentNames();
+    }
+    @GetMapping("sync-thread")
+    public void getNamesSync(){
+        studentService.getStudentNamesSync();
+    }
 }

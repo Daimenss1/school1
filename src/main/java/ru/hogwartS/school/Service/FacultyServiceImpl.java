@@ -15,9 +15,9 @@ import java.util.Optional;
 @Service
 public class FacultyServiceImpl implements FacultyService{
 
-    Logger logger = LoggerFactory.getLogger(FacultyService.class);
+    static Logger logger = LoggerFactory.getLogger(FacultyService.class);
 
-    private final FacultyRepository facultyRepository;
+    private static FacultyRepository facultyRepository;
 
     @Autowired
     public FacultyServiceImpl(FacultyRepository facultyRepository) {
